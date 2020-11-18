@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -60,6 +62,21 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $profilePhoto;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Station::class, mappedBy="users")
+     */
+    private $stations;
+
+    /**
+     * @ORM\OneToOne(targetEntity=APIKey::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $apiKey;
+
+    public function __construct()
+    {
+        $this->stations = new ArrayCollection();
+    }
 
     public function __toString(): ?string
     {
@@ -209,6 +226,51 @@ class User implements UserInterface
     public function setProfilePhoto(?string $profilePhoto): self
     {
         $this->profilePhoto = $profilePhoto;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Station[]
+     */
+    public function getStations(): Collection
+    {
+        return $this->stations;
+    }
+
+    public function addStation(Station $station): self
+    {
+        if (!$this->stations->contains($station)) {
+            $this->stations[] = $station;
+            $station->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStation(Station $station): self
+    {
+        if ($this->stations->contains($station)) {
+            $this->stations->removeElement($station);
+            $station->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getApiKey(): ?APIKey
+    {
+        return $this->apiKey;
+    }
+
+    public function setApiKey(APIKey $apiKey): self
+    {
+        $this->apiKey = $apiKey;
+
+        // set the owning side of the relation if necessary
+        if ($apiKey->getUser() !== $this) {
+            $apiKey->setUser($this);
+        }
 
         return $this;
     }

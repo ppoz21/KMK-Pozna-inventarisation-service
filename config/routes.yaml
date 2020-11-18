@@ -7,6 +7,34 @@ index:
   path: /
   controller: App\Controller\MainController::mainAction
 
+# station
+
+station:
+  path: /stacje
+  controller: App\Controller\StationController::listAction
+
+station_details:
+  path: /stacje/{slug}-s{id}
+  controller: App\Controller\StationController::detailsAction
+  requirements:
+    slug: .*
+    id: \d+
+
+get_form_ajax:
+  path: /ajax/pobierz-formularz-stacji
+  controller: App\Controller\StationController::ajaxCreateFormAction
+  options:
+    expose: true
+
+
+add_station_ajax:
+  path: /ajax/dodaj-stacje
+  controller: App\Controller\StationController::ajaxAddStationAction
+  options:
+    expose: true
+
+# security
+
 forget_password:
   path: /nie-pamietam-hasla
   controller: App\Controller\SecurityController::forgetPassword
