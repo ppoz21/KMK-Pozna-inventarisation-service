@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Station;
+use App\Entity\StationLog;
 use App\Entity\User;
 use App\Form\AddStationFormType;
 use App\Repository\APIKeyRepository;
@@ -91,6 +92,7 @@ class StationController extends AbstractController
             'errors' => [],
             'status' => null
         ];
+        $new = false;
 
         $validKey = $keyRepository->findOneBy(['apiKey' => $apiKey, 'active' => true]);
         if (! $validKey)
@@ -108,25 +110,54 @@ class StationController extends AbstractController
                     if (!$station)
                     {
                         $station = new Station();
+                        $new = true;
                     }
                 }
                 else
                 {
                     $station = new Station();
+                    $new = true;
                 }
                 $station->setName($name);
                 $station->setDescription($description);
                 if ($users)
                 {
+                    $forLogUsers = "Dodano użytkowników: ";
                     foreach ($users as $user)
                     {
                         $tempUser = $this->em->getRepository(User::class)->find($user);
                         $station->addUser($tempUser);
+                        $forLogUsers .= $tempUser . ' ';
                     }
                 }
                 try {
+                    $user = $validKey->getUser();
+                    $log = new StationLog();
+                    if ($new)
+                    {
+                        $msg = "Utworzono stację " . $station->getName() . ". ";
+                    }
+                    else
+                    {
+                        $msg = "Edytowano " . $station->getName() . ". ";
+                    }
+                    if (isset($forLogUsers))
+                    {
+                        $msg .= $forLogUsers;
+                    }
+
                     $this->em->persist($station);
                     $this->em->flush();
+                    try {
+                        $log->setDate(new \DateTime());
+                        $log->setStation($station);
+                        $log->setUser($user);
+                        $log->setContent($msg);
+                        $this->em->persist($log);
+                        $this->em->flush();
+                    }
+                    catch (\Exception $e){}
+
                     $response['status'] = 'success';
                 }
                 catch (\Exception $e)

@@ -25,7 +25,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="javascript:void(0)" class="nav-link">
+                    <a href="{{ path('index') }}" class="nav-link {{ activeHomepage is defined ? 'active' : '' }}">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
                             Strona główna
@@ -41,7 +41,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ path('station') }}" class="nav-link">
+                    <a href="{{ path('station') }}" class="nav-link {{ stacjeActive is defined ? 'active' : '' }}">
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>
                             Stacje

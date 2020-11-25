@@ -47,10 +47,16 @@ class Station
      */
     private $slug;
 
+    /**
+     * @ORM\OneToMany(targetEntity=StationLog::class, mappedBy="station")
+     */
+    private $logs;
+
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +137,37 @@ class Station
     public function setSlug(): self
     {
         $this->slug = SlugUtil::generateSlug($this->getName());
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StationLog[]
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(StationLog $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setStation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(StationLog $log): self
+    {
+        if ($this->logs->contains($log)) {
+            $this->logs->removeElement($log);
+            // set the owning side to null (unless already changed)
+            if ($log->getStation() === $this) {
+                $log->setStation(null);
+            }
+        }
 
         return $this;
     }

@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% set activeHomepage = true %}
+
+{% block title %}Strona główna - {{ parent() }}{% endblock %}
+
 {% block content %}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
