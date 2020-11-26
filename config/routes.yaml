@@ -33,6 +33,20 @@ add_station_ajax:
   options:
     expose: true
 
+# train
+
+train_landing:
+  path: /sklady
+  controller: App\Controller\TrainController::landingAction
+
+train_on_station:
+  path: /sklady/stacje/{slug}-s{id}
+  controller: App\Controller\TrainController::stationAction
+
+train_details:
+  path: /sklady/{slug}-{id}
+  controller: App\Controller\TrainController::detailsAction
+
 # security
 
 forget_password:
