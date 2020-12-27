@@ -33,6 +33,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="javascript:void(0)" class="nav-link {{ activeTodo is defined ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-calendar-check"></i>
+                        <p>
+                            Zadania
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ path('train_landing') }}" class="nav-link {{ activeTrain is defined ? 'active' : '' }}">
                         <i class="nav-icon fas fa-subway"></i>
                         <p>
@@ -120,12 +128,6 @@
                             <a href="javascript:void(0)" class="nav-link">
                                 <i class="fas fa-user-minus nav-icon"></i>
                                 <p>Usuń użytkownika</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:void(0)" class="nav-link">
-                                <i class="fas fa-house-user nav-icon"></i>
-                                <p>Przypisz stacje</p>
                             </a>
                         </li>
                     </ul>

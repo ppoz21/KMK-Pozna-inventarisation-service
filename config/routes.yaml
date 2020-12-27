@@ -44,10 +44,20 @@ train_on_station:
   controller: App\Controller\TrainController::stationAction
 
 train_details:
-  path: /sklady/{slug}-{id}
+  path: /sklady/{slug}-sk-{id}
   controller: App\Controller\TrainController::detailsAction
+  requirements:
+    slug: .*
 
 # security
+
+app_login:
+  path: /zaloguj
+  controller: App\Controller\SecurityController::login
+
+app_logout:
+  path: /wyloguj
+  controller: App\Controller\SecurityController::logout
 
 forget_password:
   path: /nie-pamietam-hasla

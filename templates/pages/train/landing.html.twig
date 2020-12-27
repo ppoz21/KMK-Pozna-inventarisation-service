@@ -37,8 +37,11 @@
 
                         </div>
                         <div class="card-footer">
-                            <a href="{{ path('train_on_station', {'id': station.id, 'slug': station.slug}) }}" class="btn btn-danger">Przejdź do składów</a>
-                            <a href="{{ path('station_details', {'id': station.id, 'slug': station.slug}) }}" class="btn btn-secondary">Zobacz szczegóły stacji</a>
+                            <div class="row">
+                                <a href="{{ path('train_on_station', {'id': station.id, 'slug': station.slug}) }}" class="btn btn-danger col-12 col-lg-4 col-md-6 col-sm-12 mb-2">Przejdź do składów</a>
+                                <a href="{{ path('station_details', {'id': station.id, 'slug': station.slug}) }}" class="btn btn-secondary col-12 col-lg-4 col-md-6 col-sm-12 mb-2 ml-auto">Zobacz szczegóły stacji</a>
+
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>

@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Station;
+use App\Entity\Train;
 use App\Repository\StationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TrainController extends AbstractController
 {
@@ -31,8 +33,8 @@ class TrainController extends AbstractController
         {
             $stations = $stationRepository->findAll();
         }
-        return $this->render('train/landing.html.twig', [
-            'stations' => $stations
+        return $this->render('pages/train/landing.html.twig', [
+            'stations' => $stations,
         ]);
     }
 
@@ -43,8 +45,8 @@ class TrainController extends AbstractController
         {
             if ($slug == $station->getSlug())
             {
-                return $this->render('train/on-station.html.twig', [
-                    'station' => $station
+                return $this->render('pages/train/on-station.html.twig', [
+                    'station' => $station,
                 ]);
             }
             else
@@ -55,12 +57,30 @@ class TrainController extends AbstractController
         }
         else
         {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException("Nie znaleziono stacji!");
         }
     }
 
     public function detailsAction($id = 0, $slug = null): Response
     {
-
+        $train = $this->em->getRepository(Train::class)->find($id);
+        if ($train)
+        {
+            if ($slug == $train->getSlug())
+            {
+                return $this->render('pages/train/details.html.twig', [
+                    'train' => $train,
+                ]);
+            }
+            else
+            {
+                $slug = $train->getSlug();
+                return new RedirectResponse($this->generateUrl('train_details', ['id' => $id, 'slug' => $slug]));
+            }
+        }
+        else
+        {
+            throw new NotFoundHttpException("Nie znaleziono składu!");
+        }
     }
 }

@@ -51,7 +51,7 @@
 
                                 <ul class="list-group list-group-unbordered mb-3">
                                     <li class="list-group-item">
-                                        <b>Ilość składów</b> <a class="float-right">{# TODO #}0</a>
+                                        <b>Ilość składów</b> <a class="float-right">{{ station.trains | length }}</a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Ilość przypisanych użytkowników</b> <a class="float-right">{{ station.users | length }}</a>
@@ -95,7 +95,40 @@
                             <div class="card-body">
                                 <div class="tab-content">
                                     <div class="active tab-pane" id="sklady">
-                                        {# TODO: TABELKA ZE SKŁADAMI #}
+                                        <table id="listaSkladow" class="table table-bordered table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Lokomotywa</th>
+                                                <th>Malowanie</th>
+                                                <th>Wagony</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% if station.trains|length < 1 %}
+                                            <tr>
+                                                <td colspan="4" class="text-center">Do stacji nie przypisano składów!</td>
+                                                {% else %}
+                                                    {% for train in station.trains %}
+                                                        <td>{{ loop.index }}</td>
+                                                        <td><a href="{{ path('train_details', {'id': train.id, 'slug': train.slug}) }}">{{ train.locomotive.typeAndNumber }}</a></td>
+                                                        <td>{{ train.locomotive.painting }}</td>
+                                                        <td>
+                                                            <table class="table table-bordered table-hover">
+                                                                <tbody>
+                                                                {% for car in train.cars %}
+                                                                    <tr>
+                                                                        <td>{{ car.type }} {{ car.number }}</td>
+                                                                        <td>{{ car.comments }}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    {% endfor %}
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <!-- /.tab-pane -->
                                     <div class="tab-pane" id="uzytkownicy">

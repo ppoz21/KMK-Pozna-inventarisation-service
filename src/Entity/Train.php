@@ -41,9 +41,15 @@ class Train
      */
     private $station;
 
+    /**
+     * @ORM\OneToMany(targetEntity=TrainLog::class, mappedBy="Train")
+     */
+    private $logs;
+
     public function __construct()
     {
         $this->cars = new ArrayCollection();
+        $this->logs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -113,6 +119,36 @@ class Train
     public function setStation(?Station $station): self
     {
         $this->station = $station;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TrainLog[]
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(TrainLog $log): self
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs[] = $log;
+            $log->setTrain($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLog(TrainLog $log): self
+    {
+        if ($this->logs->removeElement($log)) {
+            // set the owning side to null (unless already changed)
+            if ($log->getTrain() === $this) {
+                $log->setTrain(null);
+            }
+        }
 
         return $this;
     }

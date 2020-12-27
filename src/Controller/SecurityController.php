@@ -15,9 +15,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/login", name="app_login")
-     */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
          if ($this->getUser()) {
@@ -29,12 +26,11 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('pages/security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
     public function forgetPassword(Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, string $hash = null): Response
     {
-        dump($hash);
         $error = null;
         $success = null;
 
@@ -59,7 +55,7 @@ class SecurityController extends AbstractController
                         )
                     );
 
-//                    $user->removeForgetPasswordHash();
+                    $user->removeForgetPasswordHash();
                     $em->persist($user);
                     $em->flush();
 
@@ -72,7 +68,7 @@ class SecurityController extends AbstractController
                 $error = 'Niepoprawny link resetujący!';
             }
 
-            return $this->render('security/reset-password.html.twig', [
+            return $this->render('pages/security/reset-password.html.twig', [
                 'reset_form' => $form,
                 'error' => $error,
                 'success' => $success
@@ -109,7 +105,7 @@ class SecurityController extends AbstractController
                 }
             }
 
-            return $this->render('security/forget_password.html.twig', [
+            return $this->render('pages/security/forget_password.html.twig', [
                 'forget_form' => $form->createView(),
                 'error' => $error,
                 'success' => $success
@@ -117,9 +113,6 @@ class SecurityController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
     public function logout()
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
