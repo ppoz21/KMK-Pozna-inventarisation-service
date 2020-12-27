@@ -114,16 +114,20 @@
                                                         <td><a href="{{ path('train_details', {'id': train.id, 'slug': train.slug}) }}">{{ train.locomotive.typeAndNumber }}</a></td>
                                                         <td>{{ train.locomotive.painting }}</td>
                                                         <td>
-                                                            <table class="table table-bordered table-hover">
-                                                                <tbody>
-                                                                {% for car in train.cars %}
-                                                                    <tr>
-                                                                        <td>{{ car.type }} {{ car.number }}</td>
-                                                                        <td>{{ car.comments }}</td>
-                                                                    </tr>
-                                                                {% endfor %}
-                                                                </tbody>
-                                                            </table>
+                                                            {% if train.cars | length < 1 %}
+                                                                Skład nie ma przypisanych wagonów!
+                                                            {% else %}
+                                                                <table class="table table-bordered table-hover">
+                                                                    <tbody>
+                                                                    {% for car in train.cars %}
+                                                                        <tr>
+                                                                            <td>{{ car.type }} {{ car.number }}</td>
+                                                                            <td>{{ car.comments }}</td>
+                                                                        </tr>
+                                                                    {% endfor %}
+                                                                    </tbody>
+                                                                </table>
+                                                            {% endif %}
                                                         </td>
                                                     {% endfor %}
                                                 {% endif %}
